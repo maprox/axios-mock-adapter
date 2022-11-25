@@ -38,6 +38,10 @@ function combineUrls(baseURL, url) {
   return url;
 }
 
+function isRegExp(handler) {
+  return (handler instanceof RegExp) || ('test' in handler && typeof handler.test === 'function');
+}
+
 function findHandler(
   handlers,
   method,
@@ -55,7 +59,7 @@ function findHandler(
         isBodyOrParametersMatching(method, body, parameters, handler[1]) &&
         isObjectMatching(headers, handler[2])
       );
-    } else if (handler[0] instanceof RegExp) {
+    } else if (isRegExp(handler[0])) {
       return (
         (handler[0].test(url) || handler[0].test(combineUrls(baseURL, url))) &&
         isBodyOrParametersMatching(method, body, parameters, handler[1]) &&
